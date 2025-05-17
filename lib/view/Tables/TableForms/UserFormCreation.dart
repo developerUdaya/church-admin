@@ -327,20 +327,20 @@ Future<List<String>> _fetchFamilyGroupIds() async {
                   text: "ADD NOW",
                   color: primaryBlue,
                   textColor: Colors.white,
-                  // onPressed: _validateForm,
-                  onPressed: () {
-                    //show snack bar with message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                      content: Text('Error occurred while submitting the form.'),
-                      backgroundColor: Colors.red,
-                      ),
-                    );
+                  onPressed: _validateForm,
+                  // onPressed: () {
+                  //   //show snack bar with message
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(
+                  //     content: Text('Error occurred while submitting the form.'),
+                  //     backgroundColor: Colors.red,
+                  //     ),
+                  //   );
                     
-                    // _validateForm();
+                  //   // _validateForm();
 
 
-                  },
+                  // },
                 ),
                 const SizedBox(width: 15),
                 CustomButton(

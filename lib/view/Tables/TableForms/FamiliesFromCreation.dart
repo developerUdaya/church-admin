@@ -218,6 +218,7 @@ class _FamiliesFormCreationState extends State<FamiliesFormCreation> {
     return Center(
       child: AddproductphotoWidget(
         titleName: 'Add Family Photo',
+        outerHeight: 0.30,
         onImageSelected: (File? file, Uint8List? bytes) {
           setState(() {
             selectedImageFile = file;

@@ -27,8 +27,14 @@ class TableWidget extends StatefulWidget {
 
 class _TableWidgetState extends State<TableWidget> {
   int? _hoveredRowIndex;
-  int _rowsPerPage = 10;
+  late int _rowsPerPage;
   int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _rowsPerPage = WidgetsBinding.instance.window.physicalSize.height / WidgetsBinding.instance.window.devicePixelRatio > 800 ? 15 : 10;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -276,8 +282,8 @@ Widget _buildCellContent(String type, dynamic data) {
       return const Text('Invalid Data');
 
     case 'UserList':
-      if (data is List<String>) {
-        return UserList(userImages: data);
+      if (data is Map<String, dynamic>) {
+        return UserList(userImages: data["profilePictures"] ,count: data["count"],);
       }
       return const Text('Invalid Data');
 
@@ -304,7 +310,7 @@ Widget _buildCellContent(String type, dynamic data) {
       );
 
     case 'Action':
-      return OptionButton(menuItems: data == 'Action' ? menuItems : Testimony);
+      return OptionButton(menuItems: data   );
 
     case "Status":
       return data is String

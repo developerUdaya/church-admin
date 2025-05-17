@@ -1,29 +1,53 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class UserServices {
+
   static Future<List<Map<String, dynamic>>> fetchUserDetails() async {
     List<Map<String, dynamic>> userList_Table = [];
     final response = await http
-        .get(Uri.parse('http://147.93.97.78:5030/users_with_other_details/'));
+        .get(Uri.parse('http://147.93.97.78:5030/user_with_other_details_by_role/user/'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['users'];
       userList_Table = data.map((user) {
-        return {
-          "No": user['user']['id'],
-          "Name": {
-            "name": user['user']['name'],
-            "profilePictures": user['user']['profile_image']
-          },
-          'Phone': user['user']['contact_number'],
-          'Pin Code':
-              'N/A', // Assuming Pin Code is not available in the API response
-          "Status": user['user']['active_status'].toString().replaceFirstMapped(
-              RegExp(r'^\w'), (match) => match.group(0)!.toUpperCase()),
-          "Action": 'Action',
-        };
+      return {
+        "No": user['user']['id'],
+        "Name": {
+        "name": user['user']['name'],
+        "profilePictures": user['user']['profile_image']
+        },
+        'Phone': user['user']['contact_number'],
+        'Pin Code': 
+          user['addresses'] != null && user['addresses'].isNotEmpty 
+          ? user['addresses'][0]['postal_code'] 
+          : '', 
+        "Status": user['user']['active_status'].toString().replaceFirstMapped(
+          RegExp(r'^\w'), (match) => match.group(0)!.toUpperCase()),
+        "Action": 
+
+         [
+  {
+    'label': 'View/Edit',
+    'icon': Icons.edit,
+    'onPressed': () {
+      print('Edit button pressed');
+    },
+  },
+  {
+    'label': 'Delete',
+    'icon': Icons.delete,
+    'onPressed': () {
+      print('Delete button pressed');
+    },
+  }
+]
+      };
       }).toList();
+
+      // Sort the userList_Table by 'No' (user['user']['id'])
+      userList_Table.sort((a, b) => a["No"].compareTo(b["No"]));
     } else {
       throw Exception('Failed to load user details');
     }
@@ -43,6 +67,7 @@ class UserServices {
       }
     ];
   }
+
 
   static Future<List<Map<String, dynamic>>> fetchUsersCount() async {
     List<Map<String, dynamic>> userlistTable = [];

@@ -8,19 +8,19 @@ class Familiesservice {
     List<Map<String, dynamic>> responseDataTable = [];
 
     try {
-      final response = await http.get(Uri.parse("${baseUrl}groups/"));
+      final response = await http.get(Uri.parse("${baseUrl}fetch_all_family_with_other_details/"));
       if (response.statusCode == 200) {
-        
         final List<dynamic> data = jsonDecode(response.body);
         responseDataTable = data.map((data) {
           return {
-            "No": data['id'],
-            "Title": data['group_name'],
-            "FamilyLeader": data['type'], // Note: Should this be head_user?
-            "Family Count": data['ip_address'], // Note: Adjust if needed
-            "Phone": data['contact_number'] ?? '',
-            "Status": data['status'] ?? 'Active',
-            "Action": 'Action'
+            "No": data['family_id'],
+            "Title": data['title'],
+            "FamilyLeader": data['family_head'],
+            "Family Count": {"profilePictures":[data['family_members_imageUrls'][0].toString() ],
+            "count": data['family_count']??0},
+            "Phone": data['head_mobile_number'] ?? '',
+            "Status": 'Active', // Assuming status is always 'Active'
+            "Family Members Images": [data['family_members_imageUrls'][0] ]?? [],
           };
         }).toList();
       } else {
@@ -32,24 +32,24 @@ class Familiesservice {
 
     return [
       {
-        "header": [
-          'No',
-          'Title',
-          'FamilyLeader',
-          'Family Count',
-          'Phone',
-          'Status',
-          'Action'
-        ],
-        "dataType": [
-          "Text",
-          "Text",
-          "Text",
-          "UserList",
-          "Text",
-          "Status",
-          "Action"
-        ],
+    "header": [
+      'No',
+      'Title',
+      'FamilyLeader',
+      'Family Count',
+      'Phone',
+      'Status',
+      // 'Action'
+    ],
+    "dataType": [
+      "Text",
+      "Text",
+      "Text",
+      "UserList",
+      "Text",
+      "Status",
+      // "Action"
+    ],
         "data": responseDataTable
       }
     ];
